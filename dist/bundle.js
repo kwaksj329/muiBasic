@@ -5957,29 +5957,36 @@ var MusicList = /*#__PURE__*/function (_React$Component) {
 
   var _super = _createSuper(MusicList);
 
-  function MusicList() {
+  function MusicList(props) {
     var _this;
 
     _classCallCheck(this, MusicList);
 
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    _this = _super.call.apply(_super, [this].concat(args));
+    _this = _super.call(this, props);
 
     _defineProperty(_assertThisInitialized(_this), "toggleFavorite", function (id) {
       return function () {
-        var item = _this.props.list.results.find(function (album) {
-          return album.collectionId == id;
-        });
+        var likes = _this.state.likes;
+        console.log(likes[id]);
 
-        item.like = true;
+        if (likes[id] == undefined) {
+          likes[id] = true;
+        } else {
+          likes[id] = likes[id] ? false : true;
+        }
+
+        _this.setState({
+          likes: likes
+        });
       };
     });
 
+    _this.state = {
+      likes: {}
+    };
     return _this;
-  }
+  } //id가 들어오면 함수를 return
+
 
   _createClass(MusicList, [{
     key: "render",
@@ -5997,7 +6004,7 @@ var MusicList = /*#__PURE__*/function (_React$Component) {
           variant: "subtitle2"
         }, " ", item.collectionCensoredName)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_4__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_5__["default"], {
           onClick: _this2.toggleFavorite(item.collectionId)
-        }, item.like ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_material_ui_icons__WEBPACK_IMPORTED_MODULE_6__["default"], null) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_material_ui_icons__WEBPACK_IMPORTED_MODULE_7__["default"], null))));
+        }, _this2.state.likes[item.collectionId] ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_material_ui_icons__WEBPACK_IMPORTED_MODULE_6__["default"], null) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_material_ui_icons__WEBPACK_IMPORTED_MODULE_7__["default"], null))));
       }));
     }
   }]);
@@ -6007,6 +6014,7 @@ var MusicList = /*#__PURE__*/function (_React$Component) {
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_8__["default"])(styles)(MusicList)); //map을 통해 list item 돌릴 때 card item에 대해 key가 있어야함 (warning 뜸)
 //this.toggleFavorite(item.collectionId) 은 함수 호출 아님! javascript의 closure와 유사함, this 꼭 붙여야함
+//react는 ui의 변화를 state를 통해서 해야함, state 변경시 react가 이를 감지하고 다시 draw함
 
 /***/ }),
 
