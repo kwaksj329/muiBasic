@@ -3,6 +3,8 @@ import { withStyles } from '@material-ui/core/styles';
 import {Card, CardContent, CardActions, Typography, IconButton} from '@material-ui/core';
 import {Favorite, FavoriteBorder} from '@material-ui/icons';
 import firebase from './firebase';
+import SnackbarMsg from './snackmsg';
+
 
 //styles = 함수
 const styles = theme => ({
@@ -25,7 +27,8 @@ class MusicList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            likes : {}
+            likes : {},
+            snackbar : {},
         };
     }
 
@@ -61,8 +64,16 @@ class MusicList extends React.Component {
             console.log('Error Occurred : '+ e);
         } */
 
-        this.setState({likes});
+        this.setState({likes, snackbar : {open : true, msg : `id ${id} clicked`}});
     }
+
+    handleSnackbarClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+          }
+      
+          this.setState({snackbar : {open : false, msg : ''}});
+    }       
 
     render () {
         const {classes} = this.props;
@@ -82,6 +93,7 @@ class MusicList extends React.Component {
                         </CardActions>
                     </Card>)
                 })}
+                <SnackbarMsg open={this.state.snackbar.open} message={this.state.snackbar.msg} onClose={this.handleSnackbarClose}></SnackbarMsg>
             </div>
 
         );
