@@ -7,7 +7,7 @@ export default class MusicList extends React.Component {
             <div>
                 {this.props.list.results.map(item => {
                     return (
-                    <Card>
+                    <Card key={item.collectionId}>
                         <CardContent>
                             <Typography variant="subtitle1"> {item.artistName}</Typography>
                             <Typography variant="subtitle2"> {item.collectionCensoredName}</Typography>
@@ -19,3 +19,5 @@ export default class MusicList extends React.Component {
         );
     }
 }
+
+//map을 통해 list item 돌릴 때 card item에 대해 key가 있어야함 (warning 뜸)
