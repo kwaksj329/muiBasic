@@ -3942,7 +3942,10 @@ var App = /*#__PURE__*/function (_React$Component) {
   }]);
 
   return App;
-}(react__WEBPACK_IMPORTED_MODULE_0__.Component);
+}(react__WEBPACK_IMPORTED_MODULE_0__.Component); //{}의미 : javascript = jsx 스타일, 밖에 있는 javascript 객체를 참조하기 위해, 어떤 function을 쓰기 위해
+//xml 스타일 구문에서 javascript 사용할 때 {this.state.music_list} 사용
+//{{height: 60, width: '100%'}} 는 {} 안에 javascript 내용이 오며, 또 안쪽 {}에는 json 객체가 옴
+
 
 
 
@@ -3957,9 +3960,10 @@ var App = /*#__PURE__*/function (_React$Component) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ MusicList)
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/withStyles.js");
 /* harmony import */ var _material_ui_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @material-ui/core */ "./node_modules/@material-ui/core/esm/Card/Card.js");
 /* harmony import */ var _material_ui_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @material-ui/core */ "./node_modules/@material-ui/core/esm/CardContent/CardContent.js");
 /* harmony import */ var _material_ui_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @material-ui/core */ "./node_modules/@material-ui/core/esm/Typography/Typography.js");
@@ -3988,6 +3992,24 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
+
+var styles = function styles(theme) {
+  return {
+    content: {},
+    layout: {
+      display: 'flex',
+      justifyContent: 'center'
+    },
+    card: {
+      minWidth: 275,
+      maxWidth: 600,
+      marginBottom: 20,
+      marginLeft: 'auto',
+      marginRight: 'auto'
+    }
+  };
+};
+
 var MusicList = /*#__PURE__*/function (_React$Component) {
   _inherits(MusicList, _React$Component);
 
@@ -4002,8 +4024,14 @@ var MusicList = /*#__PURE__*/function (_React$Component) {
   _createClass(MusicList, [{
     key: "render",
     value: function render() {
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, this.props.list.results.map(function (item) {
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      var classes = this.props.classes;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+        className: classes
+      }, this.props.list.results.map(function (item) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["default"], {
+          key: item.collectionId,
+          className: classes.card
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["default"], {
           variant: "subtitle1"
         }, " ", item.artistName), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["default"], {
           variant: "subtitle2"
@@ -4015,7 +4043,7 @@ var MusicList = /*#__PURE__*/function (_React$Component) {
   return MusicList;
 }(react__WEBPACK_IMPORTED_MODULE_0__.Component);
 
-
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_4__["default"])(styles)(MusicList)); //map을 통해 list item 돌릴 때 card item에 대해 key가 있어야함 (warning 뜸)
 
 /***/ }),
 
