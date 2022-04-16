@@ -1,4 +1,4 @@
 node_modules/
 .npm
 .next/
-
+src/firebase.js

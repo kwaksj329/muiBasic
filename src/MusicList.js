@@ -2,6 +2,7 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import {Card, CardContent, CardActions, Typography, IconButton} from '@material-ui/core';
 import {Favorite, FavoriteBorder} from '@material-ui/icons';
+import firebase from './firebase';
 
 //styles = 함수
 const styles = theme => ({
@@ -31,13 +32,34 @@ class MusicList extends React.Component {
     //id가 들어오면 함수를 return
     toggleFavorite = (id) => () => {
         let {likes} = this.state;
-        console.log(likes[id]);
+        console.log(id, likes[id]);
         if(likes[id] == undefined) {
             likes[id] = true;
         }
         else {
             likes[id] = (likes[id]) ? false : true;
         }
+
+        let db = firebase.firestore();
+        db.collection('likes').doc(String(id)).set({like : likes[id]});
+        
+        /*
+        try {
+            let ref = db.collection('likes').doc(String(id));
+            ref.get().then((doc) => {
+                if (doc.exists) {
+                    console.log('document data : ', doc.data());    
+                }
+                else {
+                    console.log('No Such Document')
+                }
+            }).catch((e) => {
+                console.log('Error while accessing Firestore : ' + e);
+            });
+        }
+        catch (e) {
+            console.log('Error Occurred : '+ e);
+        } */
 
         this.setState({likes});
     }
@@ -69,3 +91,4 @@ export default withStyles(styles)(MusicList);
 //map을 통해 list item 돌릴 때 card item에 대해 key가 있어야함 (warning 뜸)
 //this.toggleFavorite(item.collectionId) 은 함수 호출 아님! javascript의 closure와 유사함, this 꼭 붙여야함
 //react는 ui의 변화를 state를 통해서 해야함, state 변경시 react가 이를 감지하고 다시 draw함
+//class 스타일에서는 setState, funcion 스타일에서는 useState 사용
