@@ -30,4 +30,3 @@ module.exports = {
   // https://webpack.js.org/concepts/mode/#mode-development
   mode: 'development'
 };
-
