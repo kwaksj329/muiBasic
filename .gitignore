@@ -2,3 +2,7 @@ node_modules/
 .npm
 .next/
 src/firebase.js
+firebase.json
+firestore.indexes.json
+firestore.rules
+.firebaserc

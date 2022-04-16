@@ -31276,23 +31276,21 @@ var MusicList = /*#__PURE__*/function (_React$Component) {
         db.collection('likes').doc(String(id)).set({
           like: likes[id]
         });
-        /*
+
         try {
-            let ref = db.collection('likes').doc(String(id));
-            ref.get().then((doc) => {
-                if (doc.exists) {
-                    console.log('document data : ', doc.data());    
-                }
-                else {
-                    console.log('No Such Document')
-                }
-            }).catch((e) => {
-                console.log('Error while accessing Firestore : ' + e);
-            });
+          var ref = db.collection('likes').doc(String(id));
+          ref.get().then(function (doc) {
+            if (doc.exists) {
+              console.log('document data : ', doc.data());
+            } else {
+              console.log('No Such Document');
+            }
+          })["catch"](function (e) {
+            console.log('Error while accessing Firestore : ' + e);
+          });
+        } catch (e) {
+          console.log('Error Occurred : ' + e);
         }
-        catch (e) {
-            console.log('Error Occurred : '+ e);
-        } */
 
         _this.setState({
           likes: likes,
