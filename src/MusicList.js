@@ -46,7 +46,7 @@ class MusicList extends React.Component {
         let db = firebase.firestore();
         db.collection('likes').doc(String(id)).set({like : likes[id]});
         
-        
+        /*
         try {
             let ref = db.collection('likes').doc(String(id));
             ref.get().then((doc) => {
@@ -63,6 +63,7 @@ class MusicList extends React.Component {
         catch (e) {
             console.log('Error Occurred : '+ e);
         } 
+        */
 
         this.setState({likes, snackbar : {open : true, msg : `id ${id} clicked`}});
     }
