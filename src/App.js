@@ -14,6 +14,7 @@ import {AppBar, Typography, TextField, Button, Input} from '@material-ui/core/';
 //import Typography from '@material-ui/core/Typography';
 import MusicList from './MusicList';
 import music_list from './data';
+import LeftVerticalTabs from './LeftVerticalTabs';
 
 //App Component
 export default class App extends React.Component {
@@ -48,9 +49,11 @@ export default class App extends React.Component {
                 <form style={{display: 'flex', marginBottom: 20}}>
                     <div style={{display: 'flex', marginLeft: 'auto', marginRight: 'auto'}}>
                        <TextField variant="outlined" label="Music Album Search" type="search" style={{width: 450}} onChange={this.handleSearchTextChange} value={this.state.searchWord}></TextField>
-                        <Button varient="contained" color="primary" type="submit" onClick={this.handleSearch} style={{marginLeft: 20}}>Search</Button>
+                        <Button variant="contained" color="primary" type="submit" onClick={this.handleSearch} style={{marginLeft: 20}}>Search</Button>
                     </div>
                 </form>
+                <div style={{height: 60, width: '100%'}}></div>
+                <LeftVerticalTabs/>
                 { this.state.music_list.results && this.state.music_list.results.length > 0 
                     && <MusicList list={this.state.music_list}></MusicList> }    
             </div>
