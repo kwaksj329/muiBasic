@@ -36,7 +36,6 @@ class MusicList extends React.Component {
     toggleFavorite = (item) => () => {
         let {likes} = this.state;
         const id = item.collectionId;
-        console.log(id, likes[id]);
 
         let db = firebase.firestore();
         let ref = db.collection('likes').doc(String(id));
@@ -85,14 +84,10 @@ class MusicList extends React.Component {
         let {likes} = this.state;
         let db = firebase.firestore();
         let ref = db.collection('likes').get().then(docs => {
-            console.log(docs);
             docs.forEach(doc => {
-                console.log(doc.id);
                 likes[doc.id] = true;
             })
             this.setState({likes});
-            console.log('componentDidMount');
-            console.log(likes);
         }).catch(e => console.log(e));
     }
 

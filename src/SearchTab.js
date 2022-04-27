@@ -16,7 +16,7 @@ import MusicList from './MusicList';
 import music_list from './data';
 
 
-export default class SerachTab extends React.Component {
+export default class SearchTab extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -35,7 +35,6 @@ export default class SerachTab extends React.Component {
         console.log(this.state.searchWord);
         this.setState({searchWord : ''});
         fetch(`https://itunes.apple.com/search?term=${this.state.searchWord}&entity=album`).then(r => r.json()).then(r => {
-            console.log(r);
             this.setState({music_list : r, searchWord : ''});
         }).catch(e => console.log('error when search musician'));
     }
