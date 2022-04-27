@@ -1,70 +1,95 @@
-import React, { Component } from 'react';
-//import './App.css';
-//import PropTypes from 'prop-types';
-//import { withStyles } from '@material-ui/core/styles';
-//import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
-import {AppBar, Typography, TextField, Button, Input, Tabs, Tab} from '@material-ui/core/';
-//import Toolbar from '@material-ui/core/Toolbar';
-//import MenuIcon from '@material-ui/icons/Menu';
-//import IconButton from '@material-ui/core/IconButton';
-//import ExitToApp from '@material-ui/icons/ExitToApp';
-//import Drawer from '@material-ui/core/Drawer';
-//import Forms from './Forms';
-//import HomeIcon from '@material-ui/icons/Home';
-//import Typography from '@material-ui/core/Typography';
-import MusicList from './MusicList';
-import music_list from './data';
-//import { TabPanel } from '@material-ui/lab';
-import Box from '@material-ui/core/Box';
+import * as React from 'react';
+import PropTypes from 'prop-types';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import SearchTab from './SearchTab';
+import TopList from './TopList';
 
-//App Component
-export default class LeftVerticalTabs extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            tabValue : 0,
-        }
-    }
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
 
-    a11yProps = (index) => {
-        return {
-          id: `simple-tab-${index}`,
-          'aria-controls': `simple-tabpanel-${index}`,
-        };
-    }
-
-    handleTabs = (event, newValue) => {
-        this.setState({ value: newValue });
-    }
-
-    render () {
-        return (
-            <div>
-                <form>
-                    <div style={{display: 'flex', marginBottom: 20}}>
-                        <AppBar position="static">
-                        <Tabs value={this.state.tabValue} onChange={this.handleTabs} aria-label="simple tabs example">
-                            <Tab label="Item One" {...this.a11yProps(0)}/>
-                            <Tab label="Item Two" {...this.a11yProps(1)}/>
-                            <Tab label="Item Three" {...this.a11yProps(2)}/>
-                        </Tabs>
-                        </AppBar>
-                        <TabPanel value={this.state.tabValue} index={0}>Item One</TabPanel>
-                        <TabPanel value={this.state.tabValue} index={1}>Item Two</TabPanel>
-                        <TabPanel value={this.state.tabValue} index={2}>Item Three</TabPanel>
-                    </div>
-                </form>  
-            </div>
-        );
-    }
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`vertical-tabpanel-${index}`}
+      aria-labelledby={`vertical-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
 }
 
-class TabPanel extends Component {
-    render() {
-      return (
-        <Typography component="div" hidden={this.props.value !== this.props.index}>
-          <Box p={3}>{this.props.children}</Box>
-        </Typography>
-      );
-    }
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `vertical-tab-${index}`,
+    'aria-controls': `vertical-tabpanel-${index}`,
+  };
+}
+
+
+export default function LeftVerticalTabs() {
+  const [value, setValue] = React.useState(0);
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+  
+  const [topList, setTopList] = React.useState({});
+  const handleTop100 = (event) => {
+    event.preventDefault();
+    fetch(`https://itunes.apple.com/us/rss/topsongs/limit=100/json`).then(r => r.json()).then(r => {
+      console.log(r);
+      setTopList(r);
+    }).catch(e => console.log('error when search musician'));
   }
+
+  return (
+    <Box
+      sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: 224 }}
+    >
+      <Tabs
+        orientation="vertical"
+        variant="fullWidth"
+        value={value}
+        onChange={handleChange}
+        aria-label="Vertical tabs example"
+        sx={{ borderRight: 1, borderColor: 'divider' }}
+      >
+        <Tab label="SEARCH" {...a11yProps(0)} />
+        <Tab label="TOP100" {...a11yProps(1)} onClick={handleTop100}/>
+        <Tab label="NEW ALBUM" {...a11yProps(2)} />
+        <Tab label="FAVORITE" {...a11yProps(3)} />
+      </Tabs>
+      <TabPanel value={value} index={0}>
+        <SearchTab/> 
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+      { topList.results && topList.results.length > 0 && 
+        <TopList list={topList}>
+        </TopList>
+      }
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+        NEW ALBUM
+      </TabPanel>
+      <TabPanel value={value} index={3}>
+        Favorite
+        {//<MusicList list={this.state.favorite_list}/> 
+}
+      </TabPanel>
+    </Box>
+  );
+}

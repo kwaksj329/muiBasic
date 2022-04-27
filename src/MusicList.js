@@ -2,11 +2,10 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import {Card, CardContent, CardActions, Typography, IconButton} from '@material-ui/core';
 import {Favorite, FavoriteBorder} from '@material-ui/icons';
+
 import firebase from './firebase';
 import SnackbarMsg from './snackmsg';
 
-
-//styles = 함수
 const styles = theme => ({
     content : {},
     layout : {
@@ -22,6 +21,8 @@ const styles = theme => ({
     },
 });
 
+
+
 class MusicList extends React.Component {
 
     constructor(props) {
@@ -32,19 +33,23 @@ class MusicList extends React.Component {
         };
     }
 
-    //id가 들어오면 함수를 return
-    toggleFavorite = (id) => () => {
+    toggleFavorite = (item) => () => {
         let {likes} = this.state;
+        const id = item.collectionId;
         console.log(id, likes[id]);
-        if(likes[id] == undefined) {
-            likes[id] = true;
-        }
-        else {
-            likes[id] = (likes[id]) ? false : true;
-        }
 
         let db = firebase.firestore();
-        db.collection('likes').doc(String(id)).set({like : likes[id]});
+        let ref = db.collection('likes').doc(String(id));
+        ref.get().then(doc => {
+            if (doc.exists) {
+                likes[id] = false;
+                ref.delete();
+            }
+            else {
+                likes[id] = true;
+                ref.set(item);
+            }
+        }).catch(e => console.log(e));
         
         /*
         try {
@@ -62,8 +67,8 @@ class MusicList extends React.Component {
         }
         catch (e) {
             console.log('Error Occurred : '+ e);
-        } 
-        */
+        } */
+
 
         this.setState({likes, snackbar : {open : true, msg : `id ${id} clicked`}});
     }
@@ -75,6 +80,21 @@ class MusicList extends React.Component {
       
           this.setState({snackbar : {open : false, msg : ''}});
     }       
+
+    componentDidMount() {
+        let {likes} = this.state;
+        let db = firebase.firestore();
+        let ref = db.collection('likes').get().then(docs => {
+            console.log(docs);
+            docs.forEach(doc => {
+                console.log(doc.id);
+                likes[doc.id] = true;
+            })
+            this.setState({likes});
+            console.log('componentDidMount');
+            console.log(likes);
+        }).catch(e => console.log(e));
+    }
 
     render () {
         const {classes} = this.props;
@@ -88,7 +108,7 @@ class MusicList extends React.Component {
                             <Typography variant="subtitle2"> {item.collectionCensoredName}</Typography>
                         </CardContent>
                         <CardActions>
-                            <IconButton onClick={this.toggleFavorite(item.collectionId)}>
+                            <IconButton onClick={this.toggleFavorite(item)}>
                             {this.state.likes[item.collectionId] ? <Favorite /> : <FavoriteBorder />}
                             </IconButton>
                         </CardActions>
@@ -96,12 +116,8 @@ class MusicList extends React.Component {
                 })}
                 <SnackbarMsg open={this.state.snackbar.open} message={this.state.snackbar.msg} onClose={this.handleSnackbarClose}></SnackbarMsg>
             </div>
-
         );
     }
 }
+
 export default withStyles(styles)(MusicList);
-//map을 통해 list item 돌릴 때 card item에 대해 key가 있어야함 (warning 뜸)
-//this.toggleFavorite(item.collectionId) 은 함수 호출 아님! javascript의 closure와 유사함, this 꼭 붙여야함
-//react는 ui의 변화를 state를 통해서 해야함, state 변경시 react가 이를 감지하고 다시 draw함
-//class 스타일에서는 setState, funcion 스타일에서는 useState 사용
