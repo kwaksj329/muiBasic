@@ -47,12 +47,12 @@ export default function LeftVerticalTabs() {
     setValue(newValue);
   };
   
-  const [topList, setTopList] = React.useState({});
+  const [topList, setTopList] = React.useState([]);
   const handleTop100 = (event) => {
     event.preventDefault();
     fetch(`https://itunes.apple.com/us/rss/topsongs/limit=100/json`).then(r => r.json()).then(r => {
-      console.log(r);
-      setTopList(r);
+      console.log(r.feed.entry);
+      setTopList(topList => [...topList, ...r.feed.entry]);
     }).catch(e => console.log('error when search musician'));
   }
 
@@ -77,7 +77,7 @@ export default function LeftVerticalTabs() {
         <SearchTab/> 
       </TabPanel>
       <TabPanel value={value} index={1}>
-      { topList.results && topList.results.length > 0 && 
+      { topList && topList.length > 0 && 
         <TopList list={topList}>
         </TopList>
       }

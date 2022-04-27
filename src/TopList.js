@@ -17,9 +17,7 @@ const styles = theme => ({
     },
 });
 
-
-
-class MusicList extends React.Component {
+class TopList extends React.Component {
 
     constructor(props) {
         super(props);
@@ -27,23 +25,22 @@ class MusicList extends React.Component {
 
     render () {
         const {classes} = this.props;
+        let index = 1;
         return (
             <div>
-                {this.props.list.entry.map(item => {
+                {this.props.list.map(item => {
+                    console.log(item.id.attributes);
                     return (
-                        {/*}
-                    <Card key={item.collectionId} className={classes.card}>
+                    <Card align="center" key={item.id.attributes.im} className={classes.card}>
                         <CardContent>
-                            
-                            <Typography variant="subtitle1"> {item.artistName}</Typography>
-                            <Typography variant="subtitle2"> {item.collectionCensoredName}</Typography>
-                            </Card>
+                            <img src = {item['im:image'][2].label}/>
+                            <Typography variant="title"> {item.title.label}</Typography>
                         </CardContent>
-                    </Card>*/})
+                    </Card>);
                 })}
             </div>
         );
     }
 }
 
-export default withStyles(styles)(MusicList);
+export default withStyles(styles)(TopList);
