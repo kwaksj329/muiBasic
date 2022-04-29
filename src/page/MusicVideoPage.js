@@ -1,12 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { TextField, Button } from "@material-ui/core";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
+import { FavoriteContext } from "../model/FavoriteProvider";
+import { Favorite, FavoriteBorder } from "@material-ui/icons";
 
-function MvList() {
+function MusicVideoPage() {
+  const { favoriteData, handleLike } = useContext(FavoriteContext);
+
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
   const [currentPlay, setCurrentPlay] = useState({
@@ -38,8 +42,11 @@ function MvList() {
   };
 
   return (
-    <div style={{ width: "80vw" }}>
-      <form onSubmit={handleSearch}>
+    <div>
+      <form
+        onSubmit={handleSearch}
+        style={{ display: "flex", marginBottom: 20, justifyContent: "center" }}
+      >
         <TextField
           variant="outlined"
           label="Music Movie Search"
@@ -89,6 +96,24 @@ function MvList() {
             <CardActions>
               <Button
                 size="small"
+                onClick={() =>
+                  handleLike(
+                    v.trackId,
+                    v.trackName,
+                    v.artistName,
+                    v.artworkUrl100,
+                    v.previewUrl
+                  )
+                }
+              >
+                {favoriteData[v.trackId]?.like ? (
+                  <Favorite style={{ fontSize: "16px" }} />
+                ) : (
+                  <FavoriteBorder style={{ fontSize: "16px" }} />
+                )}
+              </Button>
+              <Button
+                size="small"
                 onClick={() => {
                   if (currentPlay.id !== -1 && currentPlay.id !== v.trackId) {
                     alert("이미 다른 곡이 재생중입니다.");
@@ -133,4 +158,4 @@ function MvList() {
   );
 }
 
-export default MvList;
+export default MusicVideoPage;
