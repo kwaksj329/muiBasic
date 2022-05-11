@@ -1,69 +1,35 @@
-import React, { useState } from "react";
-import { AppBar, Typography, Box } from "@material-ui/core";
-import SideBar from "./component/SideBar";
-import MusicSearchPage from "./page/MusicSearchPage";
-import TopListPage from "./page/TopListPage";
-import FavoriteListPage from "./page/FavoriteListPage";
-import MusicVideoPage from "./page/MusicVideoPage";
-import RecommendPage from "./page/RecommendPage";
-import FavoriteProvider from "./model/FavoriteProvider";
+import React from 'react';
+//import './App.css';
+//import PropTypes from 'prop-types';
+//import { withStyles } from '@material-ui/core/styles';
+//import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+import {AppBar, Typography} from '@material-ui/core';
+//import Toolbar from '@material-ui/core/Toolbar';
+//import MenuIcon from '@material-ui/icons/Menu';
+//import IconButton from '@material-ui/core/IconButton';
+//import ExitToApp from '@material-ui/icons/ExitToApp';
+//import Drawer from '@material-ui/core/Drawer';
+//import Forms from './Forms';
+//import HomeIcon from '@material-ui/icons/Home';
+//import Typography from '@material-ui/core/Typography';
+import LeftVerticalTabs from './LeftVerticalTabs';
 
-function TabPanel({ children }) {
-  return (
-    <Box
-      sx={{
-        p: 3,
-        position: "absolute",
-        marginLeft: "130px",
-        marginTop: "60px",
-        display: "flex",
-        width: "85vw",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Typography>{children}</Typography>
-    </Box>
-  );
+
+export default class App extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+    //musicSearch/${this.state.searchWord}
+    //(`https://itunes.apple.com/search?term="${this.state.searchWord}"&entity=album`)
+    render () {
+        return (
+            <div>
+            <AppBar position="fixed">
+                <Typography align="center" variant="h3" color="inherit">Your Favorite Musics</Typography>
+            </AppBar>
+            <div style={{height: 60, width: '100%'}}></div>
+            <LeftVerticalTabs/>
+            </div>
+        );
+    }
 }
-
-function App() {
-  const [page, setPage] = useState(0);
-
-  return (
-    <FavoriteProvider>
-      <AppBar position="fixed">
-        <Typography align="center" variant="h3" color="inherit">
-          Your Favorite Musics
-        </Typography>
-      </AppBar>
-      <SideBar onPageSelect={(page) => setPage(page)} />
-      {page === 0 && (
-        <TabPanel>
-          <TopListPage />
-        </TabPanel>
-      )}
-      {page === 1 && (
-        <TabPanel>
-          <MusicSearchPage />
-        </TabPanel>
-      )}
-      {page === 2 && (
-        <TabPanel>
-          <MusicVideoPage />
-        </TabPanel>
-      )}
-      {page === 3 && (
-        <TabPanel>
-          <RecommendPage />
-        </TabPanel>
-      )}
-      {page === 4 && (
-        <TabPanel>
-          <FavoriteListPage />
-        </TabPanel>
-      )}
-    </FavoriteProvider>
-  );
-}
-export default App;
